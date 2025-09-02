@@ -1,0 +1,94 @@
+@startuml
+' ตั้งค่าให้อ่านง่ายขึ้น
+left to right direction
+skinparam packageStyle rectangle
+
+' กำหนด Actor (ผู้ใช้งาน)
+actor "ผู้ใช้ทั่วไป" as GeneralUser
+actor "ผู้ขอใช้บริการ" as ServiceRequester
+actor "หัวหน้ากลุ่มการจอง" as GroupLeader
+actor "สมาชิกการจอง" as GroupMember
+actor "คนจัดคิว" as Dispatcher
+actor "คนขับรถ" as Driver
+actor "Admin" as Admin
+
+' สร้างกรอบของระบบ
+rectangle "ระบบจองรถรับส่งองค์กร" {
+  ' Use Cases สำหรับผู้ใช้ทั่วไป
+  usecase "เข้าสู่ระบบ" as UC_Login
+  usecase "สมัครสมาชิก" as UC_Register
+  usecase "ลืมรหัสผ่าน" as UC_ForgotPassword
+  usecase "ดูกระกาศทั่วไป" as UC_ViewAnnouncements
+
+  ' Use Cases สำหรับผู้ขอใช้บริการ (Base)
+  usecase "แก้ไขข้อมูลส่วนตัว" as UC_EditProfile
+  usecase "แชตระหว่างผู้ใช้บริการกับคนขับ" as UC_Chat
+
+  ' Use Cases สำหรับหัวหน้ากลุ่ม (Head)
+  usecase "จองรถ" as UC_BookVehicle
+  usecase "จัดการการจอง" as UC_ManageBooking
+  usecase "ติดตามสถานะการจอง" as UC_TrackStatus
+
+  ' Use Cases สำหรับสมาชิกกลุ่ม
+  usecase "กรอกโค้ดจองเพื่อเข้าเป็นสมาชิกกลุ่ม" as UC_EnterCode
+  usecase "ระบุตำแหน่งรับ" as UC_SetPickup
+
+  ' Use Cases สำหรับคนจัดคิว
+  usecase "จัดการการจองทั้งหมด" as UC_AdminManageBooking
+  usecase "อนุมัติการจอง" as UC_ApproveBooking
+  usecase "มอบหมายคนขับ" as UC_AssignVehicle
+  usecase "มอบหมายหัวหน้ากลุ่มจอง" as UC_AssignLeader
+
+  ' Use Cases สำหรับคนขับรถ
+  usecase "ดูรายการที่ได้รับมอบหมาย" as UC_ViewTrips
+
+  ' Use Cases สำหรับ Admin
+  usecase "จัดการผู้ใช้งาน" as UC_ManageUsers
+}
+
+' กำหนดความสัมพันธ์ (Relationships)
+
+' ผู้ใช้ทั่วไป
+GeneralUser -- UC_Login
+GeneralUser -- UC_Register
+GeneralUser -- UC_ForgotPassword
+GeneralUser -- UC_ViewAnnouncements
+
+' กำหนด Inheritance (ผู้ขอใช้บริการเป็นแม่ของหัวหน้าและสมาชิก)
+ServiceRequester <|-- GroupLeader
+ServiceRequester <|-- GroupMember
+
+' ผู้ขอใช้บริการ (ฟังก์ชันพื้นฐาน)
+ServiceRequester -- UC_EditProfile
+
+' หัวหน้ากลุ่ม
+GroupLeader -- UC_BookVehicle
+GroupLeader -- UC_ManageBooking
+
+' สมาชิกกลุ่ม
+GroupMember -- UC_EnterCode
+GroupMember -- UC_SetPickup
+
+' คนจัดคิว
+Dispatcher -- UC_AdminManageBooking
+Dispatcher --UC_AssignLeader
+Dispatcher --  UC_ApproveBooking
+Dispatcher -- UC_AssignVehicle
+Dispatcher-- UC_EditProfile
+' คนขับรถ
+Driver -- UC_ViewTrips
+Driver-- UC_EditProfile
+
+' Admin
+Admin -- UC_ManageUsers
+Admin-- UC_EditProfile
+' ความสัมพันธ์ที่ใช้ร่วมกัน
+ServiceRequester -- UC_Chat
+Driver -- UC_Chat
+
+' กำหนดความสัมพันธ์แบบ Include (ฟังก์ชันย่อยที่ต้องทำ)
+UC_ManageBooking <.. UC_TrackStatus : <<extend>>
+
+
+
+@enduml
