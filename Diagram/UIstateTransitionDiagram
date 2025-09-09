@@ -1,0 +1,153 @@
+@startuml
+title Use Case 1: Login (เข้าสู่ระบบ)
+
+[*] --> LoginPage
+LoginPage --> HomePage : Valid credentials
+LoginPage --> LoginPage : Invalid credentials\n(show error)
+HomePage --> [*]
+@enduml
+
+@startuml
+title Use Case 2: Register (สมัครสมาชิก)
+
+[*] --> RegisterPage
+RegisterPage --> SuccessPage : Valid info
+RegisterPage --> RegisterPage : Email/Phone already used
+SuccessPage --> [*]
+@enduml
+
+@startuml
+title Use Case 3: Forgot Password (ลืมรหัสผ่าน)
+
+[*] --> ForgotPasswordPage
+ForgotPasswordPage --> ResetLinkSent : Valid email/phone
+ForgotPasswordPage --> ForgotPasswordPage : Email not found
+ResetLinkSent --> ResetPasswordPage
+ResetPasswordPage --> [*]
+@enduml
+
+@startuml
+title Use Case 4: View Announcements (ดูประกาศทั่วไป)
+
+[*] --> AnnouncementPage
+AnnouncementPage --> [*] : View latest announcements
+@enduml
+
+@startuml
+title Use Case 5: Edit Profile (แก้ไขข้อมูลส่วนตัว)
+
+[*] --> ProfilePage
+ProfilePage --> EditProfilePage : Choose to edit
+EditProfilePage --> ProfilePage : Save changes
+ProfilePage --> [*]
+@enduml
+
+@startuml
+title Use Case 6: Chat (แชต)
+
+[*] --> ChatWindow
+ChatWindow --> ChatWindow : Send/Receive message
+ChatWindow --> ErrorPage : No internet
+ChatWindow --> [*]
+@enduml
+
+@startuml
+title Use Case 7: Book Vehicle (จองรถ)
+
+[*] --> BookingForm
+BookingForm --> BookingConfirmed : Submit valid info
+BookingForm --> BookingForm : Invalid info\n(show error)
+BookingConfirmed --> [*]
+@enduml
+
+@startuml
+title Use Case 8: Manage Booking (จัดการการจอง)
+
+[*] --> BookingList
+BookingList --> EditBooking : Edit
+BookingList --> CancelBooking : Cancel
+EditBooking --> BookingList : Save changes
+CancelBooking --> BookingList : Update status
+BookingList --> [*]
+@enduml
+
+@startuml
+title Use Case 9: Track Status (ติดตามสถานะการจอง)
+
+[*] --> StatusPage
+StatusPage --> StatusPage : Refresh status\n(Pending, Scheduled, In progress)
+StatusPage --> [*]
+@enduml
+
+@startuml
+title Use Case 10: Join Booking by Code (เข้าร่วมด้วยโค้ด)
+
+[*] --> JoinPage
+JoinPage --> BookingJoined : Valid code
+JoinPage --> JoinPage : Invalid code
+BookingJoined --> [*]
+@enduml
+
+@startuml
+title Use Case 11: Approve & Schedule Vehicle (อนุมัติ/จัดคิวรถ)
+
+[*] --> RequestList
+RequestList --> Approved : Approve request
+RequestList --> Rejected : Reject request
+Approved --> ScheduledQueue
+ScheduledQueue --> [*]
+Rejected --> [*]
+@enduml
+
+@startuml
+title Use Case 12: Assign Driver (จัดสรรคนขับ)
+
+[*] --> ApprovedQueue
+ApprovedQueue --> DriverAssigned : Select driver
+DriverAssigned --> [*]
+@enduml
+
+@startuml
+title Use Case 13: View Schedule (ดูตารางงาน)
+
+[*] --> SchedulePage
+SchedulePage --> [*] : View assigned jobs
+@enduml
+
+@startuml
+title Use Case 14: Confirm Job (ยืนยันการรับงาน)
+
+[*] --> JobDetail
+JobDetail --> JobConfirmed : Confirm job
+JobConfirmed --> [*]
+@enduml
+
+@startuml
+title Use Case 15: Update Status (อัปเดตสถานะ)
+
+[*] --> JobInProgress
+JobInProgress --> JobInProgress : Update status\n("Departed", "Arrived")
+JobInProgress --> [*]
+@enduml
+
+@startuml
+title Use Case 16: Manage Users (จัดการผู้ใช้)
+
+[*] --> UserList
+UserList --> EditUser : Edit
+UserList --> AddUser : Add
+UserList --> DeleteUser : Delete
+EditUser --> UserList : Save changes
+AddUser --> UserList : Save new user
+DeleteUser --> UserList : Remove user
+UserList --> [*]
+@enduml
+
+@startuml
+title Use Case 17: Manage System Data (จัดการข้อมูลระบบ)
+
+[*] --> SystemDataPage
+SystemDataPage --> EditData : Edit info (vehicles, routes, rules)
+EditData --> SystemDataPage : Save changes
+SystemDataPage --> [*]
+@enduml
