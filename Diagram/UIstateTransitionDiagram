@@ -1,154 +1,155 @@
 @startuml
-title UC1: Login (เข้าสู่ระบบ)
+title Use Case 1: Login (เข้าสู่ระบบ)
 
 [*] --> LoginPage
+LoginPage --> HomePage : Valid credentials
 LoginPage --> LoginPage : Invalid credentials\n(show error)
-LoginPage --> CustomerHome : Valid as Customer
-LoginPage --> AdminHome : Valid as Admin
-
-CustomerHome --> [*]
-AdminHome --> [*]
+HomePage --> [*]
 @enduml
 
 @startuml
-title UC2: Register (สมัครสมาชิก)
+title Use Case 2: Register (สมัครสมาชิก)
 
 [*] --> RegisterPage
-RegisterPage --> RegisterPage : Email already exists\n(show error)
-RegisterPage --> RegistrationSuccess : Valid info
-RegistrationSuccess --> CustomerHome
+RegisterPage --> SuccessPage : Valid info
+RegisterPage --> RegisterPage : Email/Phone already used
+SuccessPage --> [*]
 @enduml
 
 @startuml
-title UC3: Forgot Password (ลืมรหัสผ่าน)
+title Use Case 3: Forgot Password (ลืมรหัสผ่าน)
 
 [*] --> ForgotPasswordPage
-ForgotPasswordPage --> ForgotPasswordPage : Email not found\n(show error)
-ForgotPasswordPage --> ResetLinkSent : Valid email
+ForgotPasswordPage --> ResetLinkSent : Valid email/phone
+ForgotPasswordPage --> ForgotPasswordPage : Email not found
 ResetLinkSent --> ResetPasswordPage
-ResetPasswordPage --> LoginPage : Set new password
+ResetPasswordPage --> [*]
 @enduml
 
 @startuml
-title UC4: Edit Profile (แก้ไขข้อมูลส่วนตัว)
+title Use Case 4: View Announcements (ดูประกาศทั่วไป)
+
+[*] --> AnnouncementPage
+AnnouncementPage --> [*] : View latest announcements
+@enduml
+
+@startuml
+title Use Case 5: Edit Profile (แก้ไขข้อมูลส่วนตัว)
 
 [*] --> ProfilePage
-ProfilePage --> EditProfilePage : Select edit
-EditProfilePage --> EditProfilePage : Invalid format\n(show error)
-EditProfilePage --> ProfilePage : Save success
+ProfilePage --> EditProfilePage : Choose to edit
+EditProfilePage --> ProfilePage : Save changes
 ProfilePage --> [*]
 @enduml
 
 @startuml
-title UC5: Book Board Game Table (จองโต๊ะบอร์ดเกม)
+title Use Case 6: Chat (แชต)
 
-[*] --> BookingPage
-BookingPage --> CalendarPage : Select date & time (UC5a)
-CalendarPage --> TableSelection : Pick available table
-TableSelection --> GameSelection : Pick games (UC5b)
-GameSelection --> BookingSummary : Show details
-BookingSummary --> BookingPage : Invalid info\n(show error)
-BookingSummary --> BookingConfirmed : Confirm booking
+[*] --> ChatWindow
+ChatWindow --> ChatWindow : Send/Receive message
+ChatWindow --> ErrorPage : No internet
+ChatWindow --> [*]
+@enduml
+
+@startuml
+title Use Case 7: Book Vehicle (จองรถ)
+
+[*] --> BookingForm
+BookingForm --> BookingConfirmed : Submit valid info
+BookingForm --> BookingForm : Invalid info\n(show error)
 BookingConfirmed --> [*]
 @enduml
 
 @startuml
-title UC5a: Select Date & Time (เลือกวันและเวลา)
+title Use Case 8: Manage Booking (จัดการการจอง)
 
-[*] --> CalendarPage
-CalendarPage --> CalendarPage : Choose date & slot
-CalendarPage --> [*] : Confirm
+[*] --> BookingList
+BookingList --> EditBooking : Edit
+BookingList --> CancelBooking : Cancel
+EditBooking --> BookingList : Save changes
+CancelBooking --> BookingList : Update status
+BookingList --> [*]
 @enduml
 
 @startuml
-title UC5b: Select Equipment (เลือกอุปกรณ์เกม)
+title Use Case 9: Track Status (ติดตามสถานะการจอง)
 
-[*] --> GameSelection
-GameSelection --> GameSelection : Choose games
-GameSelection --> [*] : Confirm
+[*] --> StatusPage
+StatusPage --> StatusPage : Refresh status\n(Pending, Scheduled, In progress)
+StatusPage --> [*]
 @enduml
 
 @startuml
-title UC6: Manage System Configuration (จัดการ Configure ระบบ)
+title Use Case 10: Join Booking by Code (เข้าร่วมด้วยโค้ด)
 
-[*] --> ConfigPage
-ConfigPage --> ConfigEdit : Edit values
-ConfigEdit --> ConfigPage : Save changes
-ConfigPage --> [*]
+[*] --> JoinPage
+JoinPage --> BookingJoined : Valid code
+JoinPage --> JoinPage : Invalid code
+BookingJoined --> [*]
 @enduml
 
 @startuml
-title UC7: Manage Bookings (จัดการรายการจอง)
+title Use Case 11: Approve & Schedule Vehicle (อนุมัติ/จัดคิวรถ)
 
-[*] --> BookingListAdmin
-BookingListAdmin --> BookingDetail : Select booking
-BookingDetail --> BookingDetail : Approve / Edit / Cancel
-BookingDetail --> BookingListAdmin : Save changes
-BookingListAdmin --> [*]
+[*] --> RequestList
+RequestList --> Approved : Approve request
+RequestList --> Rejected : Reject request
+Approved --> ScheduledQueue
+ScheduledQueue --> [*]
+Rejected --> [*]
 @enduml
 
 @startuml
-title UC8: Manage Tables (จัดการข้อมูลโต๊ะ)
+title Use Case 12: Assign Driver (จัดสรรคนขับ)
 
-[*] --> TableList
-TableList --> AddTable : Add new
-TableList --> EditTable : Edit
-TableList --> TableList : Delete
-AddTable --> TableList : Save new
-EditTable --> TableList : Save changes
-TableList --> [*]
+[*] --> ApprovedQueue
+ApprovedQueue --> DriverAssigned : Select driver
+DriverAssigned --> [*]
 @enduml
 
 @startuml
-title UC9: Manage Users (จัดการข้อมูลผู้ใช้)
+title Use Case 13: View Schedule (ดูตารางงาน)
+
+[*] --> SchedulePage
+SchedulePage --> [*] : View assigned jobs
+@enduml
+
+@startuml
+title Use Case 14: Confirm Job (ยืนยันการรับงาน)
+
+[*] --> JobDetail
+JobDetail --> JobConfirmed : Confirm job
+JobConfirmed --> [*]
+@enduml
+
+@startuml
+title Use Case 15: Update Status (อัปเดตสถานะ)
+
+[*] --> JobInProgress
+JobInProgress --> JobInProgress : Update status\n("Departed", "Arrived")
+JobInProgress --> [*]
+@enduml
+
+@startuml
+title Use Case 16: Manage Users (จัดการผู้ใช้)
 
 [*] --> UserList
-UserList --> UserDetail : View/Edit
+UserList --> EditUser : Edit
 UserList --> AddUser : Add
-UserList --> UserList : Delete/Suspend/Unsuspend
-AddUser --> UserList : Save new
-UserDetail --> UserList : Save changes
+UserList --> DeleteUser : Delete
+EditUser --> UserList : Save changes
+AddUser --> UserList : Save new user
+DeleteUser --> UserList : Remove user
 UserList --> [*]
 @enduml
 
 @startuml
-title UC10: View Customer Booking History (ดูประวัติการจองลูกค้า)
+title Use Case 17: Manage System Data (จัดการข้อมูลระบบ)
 
-[*] --> UserList
-UserList --> UserDetail : Select customer
-UserDetail --> BookingHistory : View history
-BookingHistory --> [*]
+[*] --> SystemDataPage
+SystemDataPage --> EditData : Edit info (vehicles, routes, rules)
+EditData --> SystemDataPage : Save changes
+SystemDataPage --> [*]
 @enduml
 
 @startuml
-title UC11: Manage Equipment (จัดการอุปกรณ์เสริม)
-
-[*] --> EquipmentList
-EquipmentList --> AddEquipment : Add
-EquipmentList --> EditEquipment : Edit
-EquipmentList --> EquipmentList : Delete
-AddEquipment --> EquipmentList : Save new
-EditEquipment --> EquipmentList : Save changes
-EquipmentList --> [*]
-@enduml
-
-@startuml
-title UC12: View Booking Information (ดูข้อมูลการจองโต๊ะ)
-
-[*] --> MyBookings
-MyBookings --> BookingDetail : Select booking
-BookingDetail --> MyBookings
-BookingDetail --> CancelBooking : If allowed (UC12a)
-CancelBooking --> MyBookings : Save changes
-MyBookings --> [*]
-@enduml
-
-@startuml
-title UC12a: Cancel Booking (ยกเลิกการจองโต๊ะ)
-
-[*] --> BookingDetail
-BookingDetail --> ConfirmCancel : Press cancel
-ConfirmCancel --> BookingDetail : Cancel denied
-ConfirmCancel --> MyBookings : Cancel success
-MyBookings --> [*]
-@enduml
